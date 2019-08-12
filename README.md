@@ -12,6 +12,7 @@
 ```
 
 #### xml使用文件如下
+```xml
         <com.cpic.loverun.widget.ProgressButton
             android:id="@+id/myProgressButton"
             android:layout_centerInParent="true"
@@ -23,5 +24,5 @@
             my:ringColor="@color/color_red"
             android:layout_height="150dp"
             android:clickable="true">
-
+```
 ![](https://github.com/iamsyber/LongClickProgressButton/blob/master/screen_shot/screen_shoot.gif?raw=true)
