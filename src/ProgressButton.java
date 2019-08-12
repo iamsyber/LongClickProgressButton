@@ -1,5 +1,6 @@
 package com.cpic.loverun.widget;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -9,8 +10,10 @@ import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
 
-
+import com.cpic.loverun.R;
+import com.cpic.loverun.utils.MyLogUtil;
 
 /**
  * Description:
@@ -19,7 +22,6 @@ import android.view.View;
  * author xubowen
  * version 1.0
  */
-
 public class ProgressButton extends View {
 
     // 画实心圆的画笔
@@ -62,7 +64,6 @@ public class ProgressButton extends View {
     // 当前进度
     private int mProgress;
 
-    private ProgressTask mProgressTask;
 
     public ProgressButton(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -76,11 +77,11 @@ public class ProgressButton extends View {
                 switch ( event.getAction()){
                     case  MotionEvent.ACTION_DOWN:
                         MyLogUtil.showLog("MotionEvent.ACTION_DOWN");
-                        startProgress();
+                        startAnimationProgress(100);
                         break;
                     case  MotionEvent.ACTION_UP:
                         MyLogUtil.showLog("MotionEvent.ACTION_UP");
-                        stopProgress();
+                        stopAnimationProgress(mProgress);
                         break;
                 }
                 return false;
@@ -100,7 +101,6 @@ public class ProgressButton extends View {
         mRectColor = typeArray.getColor(R.styleable.TasksCompletedView_RectColor, 0xFFFFFFFF);
         mRingRadius = mRadius + mStrokeWidth;
         mBigRingRadius = mRadius + mStrokeWidth *2;
-        mProgressTask=new ProgressTask();
     }
 
     private void initVariable() {
@@ -180,40 +180,6 @@ public class ProgressButton extends View {
     }
 
 
-//更新progress或者调用结束操作的回调
-    private void setProgress(int progress) {
-        mProgress = progress;
-        MyLogUtil.showLog("setProgress mProgress= "+mProgress);
-        postInvalidate();
-        if(progress==100){
-            MyLogUtil.showLog("setProgress  mProgress=100    mProgressButtonFinishCallback.onFinish();");
-            mProgressButtonFinishCallback.onFinish();
-        }
-    }
-
-    //开始按压
-    public  void  startProgress(){
-        if(mProgress==0){
-            MyLogUtil.showLog("startProgress  mProgress==0 ProgressTask().execute(); ");
-            mProgressTask=  new ProgressTask();
-            mProgressTask.execute();
-        }else{
-            MyLogUtil.showLog("startProgress but  mProgress>0");
-        }
-    }
-
-    //取消按压
-    public  void  stopProgress(){
-        if(mProgress<100){
-            if(null!=mProgressTask){
-                mProgressTask.cancel(true);
-            }
-            mProgress = 0;
-            postInvalidate();
-        }
-    }
-
-
 
     private ProgressButtonFinishCallback mProgressButtonFinishCallback;
 
@@ -226,27 +192,50 @@ public class ProgressButton extends View {
     }
 
 
-    public   class ProgressTask extends AsyncTask<String, Integer, String> {
-        @Override
-        protected void onPreExecute() {
-        }
-        @Override
-        protected String doInBackground(final String... args) {
-            for (int i = 0; i <= 100; i++) {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                publishProgress(i);
 
+
+    private ValueAnimator startAnimator;
+    private ValueAnimator stopAnimator;
+
+    //按压开始
+    public void startAnimationProgress(int progress)
+    {
+        startAnimator = ValueAnimator.ofInt(0, progress);
+        startAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                mProgress = (int) animation.getAnimatedValue();
+                invalidate();
+                if(mProgress==100){
+                    mProgressButtonFinishCallback.onFinish();
+                }
             }
-            return null;
-        }
-        @Override
-        protected void onProgressUpdate(Integer... progress) {
-            setProgress(progress[0]);
-        }
+        });
+        startAnimator.setInterpolator(new OvershootInterpolator());
+        startAnimator.setDuration(2000);
+        startAnimator.start();
     }
+
+    //按压结束
+    public void stopAnimationProgress(int progress)
+    {
+        if(startAnimator.isRunning()){
+            startAnimator.cancel();
+        }
+        stopAnimator = ValueAnimator.ofInt(progress,0);
+        stopAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                mProgress = (int) animation.getAnimatedValue();
+                invalidate();
+            }
+        });
+
+        stopAnimator.setInterpolator(new OvershootInterpolator());
+        stopAnimator.setDuration(1000);
+        stopAnimator.start();
+    }
+
+
 
 }
