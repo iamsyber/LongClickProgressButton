@@ -24,4 +24,4 @@
             android:layout_height="150dp"
             android:clickable="true">
 
-![效果截图](![](https://github.com/iamsyber/LongClickProgressButton/blob/master/screen_shot/screen_shoot.gif) "效果截图")
+![](https://github.com/iamsyber/LongClickProgressButton/blob/master/screen_shot/screen_shoot.gif?raw=true)
