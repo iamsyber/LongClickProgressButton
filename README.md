@@ -23,5 +23,5 @@
             my:ringColor="@color/color_red"
             android:layout_height="150dp"
             android:clickable="true">
-        </com.cpic.loverun.widget.ProgressButton>
-		![](https://github.com/iamsyber/LongClickProgressButton/blob/master/screen_shot/screen_shoot.gif)
+
+![效果截图](![](https://github.com/iamsyber/LongClickProgressButton/blob/master/screen_shot/screen_shoot.gif) "效果截图")
