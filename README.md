@@ -24,4 +24,4 @@
             android:layout_height="150dp"
             android:clickable="true">
         </com.cpic.loverun.widget.ProgressButton>
-
+		![](https://github.com/iamsyber/LongClickProgressButton/blob/master/screen_shot/screen_shoot.gif)
