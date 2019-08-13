@@ -6,7 +6,6 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,7 +15,7 @@ import com.cpic.loverun.R;
 import com.cpic.loverun.utils.MyLogUtil;
 
 /**
- * Description:
+ * Description:长按结束按钮
  * CreateTime: 2019/8/9 15:11
  * <p>
  * author xubowen
@@ -198,8 +197,13 @@ public class ProgressButton extends View {
     private ValueAnimator stopAnimator;
 
     //按压开始
-    public void startAnimationProgress(int progress)
+    private void startAnimationProgress(int progress)
     {
+        if(null!=stopAnimator){
+            if(stopAnimator.isRunning()){
+                stopAnimator.cancel();
+            }
+        }
         startAnimator = ValueAnimator.ofInt(0, progress);
         startAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -217,10 +221,12 @@ public class ProgressButton extends View {
     }
 
     //按压结束
-    public void stopAnimationProgress(int progress)
+    private void stopAnimationProgress(int progress)
     {
-        if(startAnimator.isRunning()){
-            startAnimator.cancel();
+        if(null!=startAnimator) {
+            if (startAnimator.isRunning()) {
+                startAnimator.cancel();
+            }
         }
         stopAnimator = ValueAnimator.ofInt(progress,0);
         stopAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
