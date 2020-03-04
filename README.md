@@ -13,7 +13,7 @@
 
 #### xml使用文件如下
 ```xml
-        <com.cpic.loverun.widget.ProgressButton
+        <ProgressButton
             android:id="@+id/myProgressButton"
             android:layout_centerInParent="true"
             android:layout_width="150dp"
