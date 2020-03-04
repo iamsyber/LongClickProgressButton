@@ -1,4 +1,4 @@
-package com.cpic.loverun.widget;
+
 
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -11,14 +11,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 
-import com.cpic.loverun.R;
-import com.cpic.loverun.utils.MyLogUtil;
 
 /**
  * Description:长按结束按钮
  * CreateTime: 2019/8/9 15:11
  * <p>
- * author xubowen
+ * author syber
  * version 1.0
  */
 public class ProgressButton extends View {
